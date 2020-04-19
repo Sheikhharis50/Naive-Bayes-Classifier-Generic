@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+
+    <meta charset="utf-8">
+    <title>Naive Bayes Classifier - Harry</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/template.css') }}">
+</head>
+
+<body>
+
+    <div class="container">
+
+        <nav class="navbar navbar-expand-lg navbar-light bg-light nb">
+            <a class="navbar-brand" href="{{ url_for('home') }}">NBC: <b>Naive Bayes Classifier</b></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav"
+                    style="border: 1px solid black; margin-left: 2%; padding-left: 1%; padding-right: 1%;">
+                    <a class="nav-item nav-link active mu" href="{{ url_for('home') }}">Home <span
+                            class="sr-only">(current)</span></a>
+                </div>
+            </div>
+        </nav>
+        <br><br>
+        <form action="/" method="post" role="form">
+            <label class="in" style="width: 100%;">
+                <h1 style="text-align: center;">Percentages</h1>
+                <p>
+                    <b>eg:</b>
+                    <i>
+                        &nbsp;&nbsp;&nbsp; training percentage = 90 and<br> 
+                        &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
+                        testing percentage = 10<br>
+                    </i>
+                </p>
+            </label>
+            <div class="form-row">
+                <div class="col">
+                    <input type="text" name="train_per" class="form-control" placeholder="Enter the training Percentage.." />
+                </div>
+                <div class="col">
+                    <input type="text" name="test_per" class="form-control" placeholder="Enter the testing Percentage.." />
+                </div>
+            </div><br>
+            <label class="in" style="width: 100%;">
+                <h1 style="text-align: center;">Filename</h1>
+                <p>
+                    <b>eg:</b>
+                    <i>
+                        &nbsp;&nbsp;&nbsp; data/iris.csv<br>
+                    </i>
+                </p>
+            </label>
+            <div class="form-row">
+                <div class="col">
+                    <input type="text" name="filename" class="form-control"
+                        placeholder="Enter Path with Filename.." />
+                </div>
+            </div><br>
+            <label class="in" style="width: 100%;">
+                <h1 style="text-align: center;">Inputs</h1>
+                <p>
+                    <b>eg:</b><br>
+                    <i>
+                        &nbsp;&nbsp;&nbsp; 4.9<br>
+                        &nbsp;&nbsp;&nbsp; 3.0<br>
+                        &nbsp;&nbsp;&nbsp; 1.4<br>
+                        &nbsp;&nbsp;&nbsp; 0.2<br>
+                    </i>
+                </p>
+            </label>
+            <div class="form-row">
+                <div class="col">
+                    <textarea id="" name="inputs" class="form-control" rows="10"
+                    placeholder="Enter Inputs here..."></textarea>
+                </div>
+            </div>
+            <br>
+            <div class="form-row">
+                <div class="col sub">
+                    <button type="submit" class="btn btn-primary" style="background-color: black; border-color: black;">
+                        Submit
+                    </button>
+                </div>
+            </div>
+            <br><br>
+        </form>
+        <br>
+
+        {% if status is defined and status is sameas true %}
+        {% if message %}
+        <div class="alert alert-info">
+            <p>
+                {%for i in range(message['cls']|length) %}
+                Class <b>{{ message['cls'][i] }}</b> have <b>{{ message['prob'][i]}}</b> probability<br>
+                {% endfor %}
+                Hence, <br>
+                Predicted Class is <b>{{ message['preclass'] }}</b> with highest probability
+                <b>{{ message['preprob'] }}</b>
+            </p>
+        </div>
+        {% endif %}
+        {% endif %}
+        {% if status is defined and status is sameas false %}
+        <div class="alert alert-warning">
+            <p>
+                <b>Error:</b> Inputs Should Not be Empty and make sure to provide all inputs!<br>eg: 
+                <i style="color: green;">"iris have 4 attributes!"</i>
+            </p>
+        </div>
+        {% endif %}
+
+        <br><br>
+
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+        integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+        integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+        crossorigin="anonymous"></script>
+    <!-- <script>
+
+        var placeholder = 'Enter Inputs here... \n' + 
+        'eg:-\n'+
+        '\t4.9\n'+
+        '\t3.0\n'+
+        '\t1.4\n'+
+        '\t0.2';
+        $('textarea').val(placeholder);
+
+        $('textarea').focus(function () {
+            if ($(this).val() === placeholder) {
+                $(this).val('');
+            }
+        });
+
+        $('textarea').blur(function () {
+            if ($(this).val() === '') {
+                $(this).val(placeholder);
+            }
+        });
+
+        $('.btn').hover(function(){
+            if ($('textarea').val() === placeholder) {
+                $('textarea').val('');
+            }
+        }, function(){
+            $('textarea').val(placeholder);
+        })
+
+    </script> -->
+
+</body>
+
+</html>
