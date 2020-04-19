@@ -1,5 +1,8 @@
-# Naive-Bayes-Classifier
+# Naive-Bayes-Classifier-Generic
 Developed using Flask-app/jinja2 - Harry
+
+IMPORTANT: """ its new version of previous one, and it can run on any csv file dataset 
+                according to the requirements in doc file provided """
 
 There are two ways to run this App:
 
