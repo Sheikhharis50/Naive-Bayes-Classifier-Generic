@@ -134,7 +134,7 @@ class nbc:
 
     def shuffleDataset(self):
         random.shuffle(self.__dataset)
-        print("\ndata is shuffled ....\n")
+        print("data is shuffled ....\n")
 
     def splitDataset(self, training_perc, testing_perc):
         """
@@ -160,24 +160,35 @@ class nbc:
             if x[len(x)-1] not in self.__classes:
                 self.__classes.append(x[len(x)-1])
 
-    def getOccurances(self, cls, input_val=None, attr_index=None):
+    def getOccurances(self, cls=None, input_val=None, attr_index=None):
 
-        if input_val == None:
-            return len([x for x in self.__training if cls in x[len(x)-1]])
-        return len([x for x in self.__training if cls in x[len(x)-1] and x[attr_index] == input_val])
+        if input_val == None and attr_index == None:
+            return len([x for x in self.__training if cls in x[-1]])
+        
+        if cls == None:
+            return len([x for x in self.__training if x[attr_index] == input_val])
+        
+        return len([x for x in self.__training if cls in x[-1] and x[attr_index] == input_val])
 
     def findLikelihood(self, cls, inputs):
         result, index = 1.0, 0
         
         # Get total occurance of a Class
+        # P(cls)
         total = self.getOccurances(cls)
+
 
         # print(f"Given Class '{cls}' have occurences {total}")
 
         # Finding P(attr=inputs | output = cls )
         for index, inputt in enumerate(inputs):
 
-            ans = self.getOccurances(cls, inputt, index)/total
+            # P(cls | inputt) 
+            likliehood = self.getOccurances(cls, inputt, index)
+            # P(input1)
+            prior = self.getOccurances(input_val=inputt, attr_index=index)
+            # (P(cls | inputt) * P(inputt))/P(cls)
+            ans = (likliehood*prior) / total
 
             # if prior become 0
             if ans == 0:
@@ -187,24 +198,55 @@ class nbc:
                 p = (1/self.__datasetVars.getLength())
                 ans = (0 + (len(self.__training)*p))/(total+len(self.__training))
             result *= ans
-            index += 1
 
         result *= (total/len(self.__training))
         return result
 
     def predictClass(self, inputs):
-
+        """
+        it will provide the prediction of inputed features 
+        """
+        
         predictedClass = ''
         sms = message()
         max = 0.0
+        liklihoods = []
 
         # below loop will sending classes, inputs and dataset
         for cls in self.__classes:
-            result = self.findLikelihood(cls, inputs)
-            sms.create(cls, result)
+            liklihoods.append(self.findLikelihood(cls, inputs))
+        
+        for clsIn in range(self.__classes_len):
+            result = liklihoods[clsIn]/sum(liklihoods)
+            sms.create(self.__classes[clsIn], result*100)
             if result > max:
                 max = result
-                predictedClass = cls
+                predictedClass = self.__classes[clsIn]
 
-        sms.predClass(predictedClass, max)
+        sms.predClass(predictedClass, max*100)
         return sms
+
+    def getPredictions(self):
+        """
+        it will provide the predictions of testing data
+        """
+
+        predictions = []
+
+        for inputt in self.__testing:
+            predictions.append(self.predictClass(inputt[:len(inputt)-1]).preclass)
+
+        return predictions
+
+    def getAccuracy(self, predictions):
+        """
+        it will calculate the accuracy on the basis of testing dataset
+        """
+
+        correct = 0
+
+        for i, cls in enumerate(self.__testing):
+            if cls[-1] == predictions[i]:
+                correct += 1
+        
+        return (correct/float(len(self.__testing)))*100.0

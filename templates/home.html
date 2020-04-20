@@ -23,19 +23,20 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav"
                     style="border: 1px solid black; margin-left: 2%; padding-left: 1%; padding-right: 1%;">
-                    <a class="nav-item nav-link active mu" href="{{ url_for('home') }}">Home <span
-                            class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link active mu" href="{{ url_for('home') }}"
+                        style="background-color: #f8f9fa;">Home <span class="sr-only">(current)</span></a>
                 </div>
             </div>
         </nav>
         <br><br>
+
         <form action="/" method="post" role="form">
             <label class="in" style="width: 100%;">
                 <h1 style="text-align: center;">Percentages</h1>
                 <p>
                     <b>eg:</b>
                     <i>
-                        &nbsp;&nbsp;&nbsp; training percentage = 90 and<br> 
+                        &nbsp;&nbsp;&nbsp; training percentage = 90 and<br>
                         &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
                         testing percentage = 10<br>
                     </i>
@@ -43,10 +44,12 @@
             </label>
             <div class="form-row">
                 <div class="col">
-                    <input type="text" name="train_per" class="form-control" placeholder="Enter the training Percentage.." />
+                    <input type="text" name="train_per" class="form-control"
+                        placeholder="Enter the training Percentage.." />
                 </div>
                 <div class="col">
-                    <input type="text" name="test_per" class="form-control" placeholder="Enter the testing Percentage.." />
+                    <input type="text" name="test_per" class="form-control"
+                        placeholder="Enter the testing Percentage.." />
                 </div>
             </div><br>
             <label class="in" style="width: 100%;">
@@ -60,8 +63,7 @@
             </label>
             <div class="form-row">
                 <div class="col">
-                    <input type="text" name="filename" class="form-control"
-                        placeholder="Enter Path with Filename.." />
+                    <input type="text" name="filename" class="form-control" placeholder="Enter Path with Filename.." />
                 </div>
             </div><br>
             <label class="in" style="width: 100%;">
@@ -79,7 +81,7 @@
             <div class="form-row">
                 <div class="col">
                     <textarea id="" name="inputs" class="form-control" rows="10"
-                    placeholder="Enter Inputs here..."></textarea>
+                        placeholder="Enter Inputs here..."></textarea>
                 </div>
             </div>
             <br>
@@ -98,6 +100,8 @@
         {% if message %}
         <div class="alert alert-info">
             <p>
+                <label><b>Testing Accuracy: </b></label>&nbsp;
+                {{accuracy}}<br>
                 {%for i in range(message['cls']|length) %}
                 Class <b>{{ message['cls'][i] }}</b> have <b>{{ message['prob'][i]}}</b> probability<br>
                 {% endfor %}
@@ -111,11 +115,12 @@
         {% if status is defined and status is sameas false %}
         <div class="alert alert-warning">
             <p>
-                <b>Error:</b> Inputs Should Not be Empty and make sure to provide all inputs!<br>eg: 
+                <b>Error:</b> Inputs Should Not be Empty and make sure to provide all inputs!<br>eg:
                 <i style="color: green;">"iris have 4 attributes!"</i>
             </p>
         </div>
         {% endif %}
+
 
         <br><br>
 
@@ -162,7 +167,7 @@
         })
 
     </script> -->
-
+    
 </body>
 
 </html>

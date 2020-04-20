@@ -23,6 +23,7 @@ class ReusableForm(Form):
 def home():
     form = ReusableForm(request.form)
     sms = ''
+    acc = 0.0
 
     if request.method == 'POST':
         print("\nFilename is: ")
@@ -61,12 +62,15 @@ def home():
         # the parameters passing to this methods are:
         # training_percentage and testing_percentage
         run.splitDataset(float(train_per), float(test_per))
+        
+        predictions = run.getPredictions()
+        acc = run.getAccuracy(predictions)
 
         sms = run.predictClass(inputs)
         # it will give you the predicted class
         # using given inputs
 
-    return render_template('home.html', form=form, status=True, message=sms)
+    return render_template('home.html', form=form, status=True, message=sms, accuracy=acc)
 
 
 if __name__ == "__main__":
