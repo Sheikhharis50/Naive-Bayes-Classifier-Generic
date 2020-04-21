@@ -159,6 +159,7 @@ class nbc:
         for x in self.__training:
             if x[len(x)-1] not in self.__classes:
                 self.__classes.append(x[len(x)-1])
+        self.__classes_len = len(self.__classes)
 
     def getOccurances(self, cls=None, input_val=None, attr_index=None):
 
@@ -233,8 +234,9 @@ class nbc:
 
         predictions = []
 
-        for inputt in self.__testing:
+        for index, inputt in enumerate(self.__testing):
             predictions.append(self.predictClass(inputt[:len(inputt)-1]).preclass)
+            print(f"For Input {index+1} prediction is: {predictions[index]}")
 
         return predictions
 
@@ -248,5 +250,6 @@ class nbc:
         for i, cls in enumerate(self.__testing):
             if cls[-1] == predictions[i]:
                 correct += 1
+                print(f"Accuracy until now: {(correct/float(i)*100.0)}")
         
         return (correct/float(len(self.__testing)))*100.0

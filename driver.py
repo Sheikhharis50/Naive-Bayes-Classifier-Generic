@@ -7,10 +7,11 @@ from time import sleep
 # needs to create an object of nbc class
 run = nbc()
 
-#path = input("\nProvide dataset file path: ")
+path = input("\nProvide dataset file path: ")
 
 # First Read dataset
-run.readDataset('data/iris.csv')
+run.readDataset(path)
+# run.readDataset('data/iris.csv')
 print("")
 
 # check if data is properly loaded
@@ -54,13 +55,17 @@ while True:
 
         for i in range(0, len(sms.cls)):
             print("Class '",sms.cls[i],"' have " ,sms.prob[i]," probability")
-            print("Hence,")
-            print("Predicted Class is '",sms.preclass,"' with highest probability ", sms.preprob)
-            print("")
+        
+        print("Hence,")
+        print("Predicted Class is '", sms.preclass,
+              "' with highest probability ", sms.preprob)
+        print("")
 
     elif choice == 2:
 
+        print("")
         predictions = run.getPredictions()
+        print("")
         acc = run.getAccuracy(predictions)
         print("Accuracy: {0}%\n".format(acc))
 
